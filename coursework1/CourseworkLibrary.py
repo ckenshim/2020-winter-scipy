@@ -16,14 +16,15 @@ def ReadFile(filename):
     # the third line contains the number of states of each variable
     # this command extracts a list of integers. The split method breaks the line into a list of substrings
     # The map function applies a function (int) to a list (the substrings) to produce a list of integers.
-    noStates = map(int, ((f.readline()).split()))
+    # line = f.readline().split()
+    noStates = list(map(int, ((f.readline()).split())))
     # the fourth line contains a single integer the number of data points
     noDataPoints = int(f.readline())
     # all the subsequent lines of the file are data points. Each line is extracted as a list of integers which is 
     # appended to the list datain.
     datain = []
     for x in range(noDataPoints):
-        datain.append(map(int, ((f.readline()).split())))
+        datain.append(list(map(int, ((f.readline()).split()))))
     f.close()
     return [noVariables, noRoots, noStates, noDataPoints, datain]
 
