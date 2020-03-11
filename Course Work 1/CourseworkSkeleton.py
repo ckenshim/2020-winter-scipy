@@ -60,21 +60,24 @@ def JPT2CPT(aJPT):
 
 
 # Function to query a naive Bayesian network
-def Query(theQuery, naiveBayes, noStates):
-    rootPdf = np.zeros((naiveBayes[0].shape[0]), float)
+def Query(theQuery, naiveBayes):
+    # naiveBayes = prior
+    rootPdf = np.zeros((naiveBayes.shape[0]), float)
     # Coursework 1 task 5 should be inserted here
-    prior = Prior(naiveBayes, 0, noStates)
-    # print('Query root prior:', prior)
+    cpt_table = [1, 2, 3, 4, 5]
+    for i in range(len(theQuery)):
+        cpt_table[i] = CPT(theData, i+1, 0, noStates)
+    # print(cpt_table)
 
-    # for node in theQuery:
-    rootPdf[0] = np.sum(prior)
-    for child_node in range(1, len(theQuery)+1):
-        cPT = CPT(naiveBayes, child_node, 0, noStates)
-        cPTandPrior = cPT[theQuery[child_node-1]]*prior
-        rootPdf[child_node] = np.sum(cPTandPrior)
-        # print('CPT', child_node, '\n', cPT[theQuery[child_node-1]])
-        # print('CPT and Prior', child_node, '\n', cPTandPrior)
+    for root in range(len(rootPdf)):
+        rootPdf[root] = naiveBayes[root]
+        for index, child in enumerate(theQuery):
+            # print("Root: ", root, 'Query: ', child)
+            # print(cpt_table[root][child][root])
+            rootPdf[root] *= cpt_table[index][child][root]
 
+    if np.sum(rootPdf) != 0:
+        rootPdf = rootPdf / (np.sum(rootPdf))
     # print('Root Pdf: ', rootPdf)
     # end of coursework 1 task 5
     return rootPdf
@@ -95,8 +98,8 @@ if __name__ == '__main__':
     cPT = CPT(theData, 2, 0, noStates)
     jPT = JPT(theData, 2, 0, noStates)
     jPT2cPT = JPT2CPT(jPT)
-    query = Query([4, 0, 0, 0, 5], theData, noStates)
-    query2 = Query([6, 5, 2, 5, 5], theData, noStates)
+    query = Query([4, 0, 0, 0, 5], prior)
+    query2 = Query([6, 5, 2, 5, 5], prior)
     AppendList("results.txt", prior)
 
     AppendString("results.txt", "")  # blank line
