@@ -1,7 +1,4 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
 
-# Coursework in Python 
 from CourseworkLibrary import *
 import numpy as np
 
